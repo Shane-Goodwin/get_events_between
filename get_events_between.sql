@@ -156,7 +156,7 @@ block1: BEGIN
 		TRUNCATE temporary_table_recurring_dates;
                     
         # Insert all recurring dates for event into temporary_table_recurring_dates
-		SET @temp := recurrences_for_test(
+		SET @temp := recurrences_for(
 			recurrences_start,
 			recurrences_end,
 			event_id,
@@ -166,7 +166,7 @@ block1: BEGIN
 			event_ends_at,
 			event_frequency,
 			event_separation,
-			event_count,
+			count_limit,
 			event_until
 		);
 		
@@ -183,7 +183,7 @@ block1: BEGIN
 						`next_date` NOT IN (
 							SELECT `date` FROM `event_cancellations` WHERE `event_id` = event_id
 						)
-					LIMIT count_limit;
+					LIMIT events_limit;
 			DECLARE CONTINUE HANDLER FOR NOT FOUND SET no_more_recurrence_rows := TRUE;
 			
 			OPEN recurrences_cursor;
@@ -260,7 +260,7 @@ block1: BEGIN
 	END LOOP get_events;
 	
 	# Return rows from temporary_table_events
-	SELECT * FROM temporary_table_events;
+	SELECT *, COALESCE(`starts_on`, `starts_at`) as `event_start` FROM `temporary_table_events`;
                     
 	DROP TEMPORARY TABLE IF EXISTS temporary_table_events;
 	DROP TEMPORARY TABLE IF EXISTS temporary_table_recurring_dates;

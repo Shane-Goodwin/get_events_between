@@ -55,7 +55,7 @@ BEGIN
 		END IF;
 
 		# Recurrences generated are inserted into Temporary Table of the name temporary_table_recurring_dates
-		SET @temp := generate_recurrences_test(
+		SET @temp := generate_recurrences(
 			duration,
 			recurrences_start,
 			COALESCE(DATE(event_ends_at), event_ends_on),
