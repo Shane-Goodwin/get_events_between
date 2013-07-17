@@ -1,0 +1,10 @@
+CREATE FUNCTION split_string(
+	string VARCHAR(255),
+	delim VARCHAR(12),
+	pos INT
+)
+RETURNS VARCHAR(255)
+DETERMINISTIC
+NO SQL
+
+RETURN REPLACE(SUBSTRING(SUBSTRING_INDEX(string, delim, pos), LENGTH(SUBSTRING_INDEX(string, delim, pos -1)) + 1), delim, '')
