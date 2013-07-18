@@ -40,6 +40,12 @@ BEGIN
 	the_loop: LOOP
 		SET next_date := date_variable_add(start_date, intervals * duration_expression, duration_unit);
 		
+		# Prevent adding next_date if it is the original date
+		IF next_date = original_start_date THEN
+			SET intervals := intervals + 1;
+			ITERATE the_loop;
+		END IF;
+		
 		IF repeat_week IS NOT NULL AND repeat_day IS NOT NULL THEN
 			SET current_month := MONTH(next_date);
 			SET next_date := DATE_ADD(next_date, INTERVAL (7 + repeat_day - (DAYOFWEEK(next_date) - 1) % 7) DAY);

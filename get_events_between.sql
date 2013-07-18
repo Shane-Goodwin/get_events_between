@@ -14,7 +14,6 @@ block1: BEGIN
 	DECLARE end_time TIME;
 	#DECLARE end_time_in_zone TIME;
 	DECLARE the_next_date DATE;
-	#DECLARE next_time TIME;
 	#DECLARE next_time_in_zone TIME;
 	#DECLARE time_offset VARCHAR(255);
 	DECLARE duration VARCHAR(10);
@@ -152,6 +151,9 @@ block1: BEGIN
 		# Split duration into expression and unit
 		SET duration_expression := split_string(duration, ' ', 1), duration_unit = split_string(duration, ' ', 2);
 		
+		# Reset no_more_recurrence_rows back to FALSE
+		SET no_more_recurrence_rows := FALSE;
+		
 		# Reset temporary table of recurrences to only contain this event's recurrences
 		TRUNCATE temporary_table_recurring_dates;
                     
@@ -224,7 +226,6 @@ block1: BEGIN
 				# Timespan event
 				ELSE
 					#SET next_time_in_zone := TIME(CONVERT_TZ(the_next_date + start_time, 'UTC', event_timezone_name));
-					#SET next_time := TIME(the_next_date + start_time);
 					#SET time_offset := (original_date_in_zone + next_time_in_zone) - (original_date_in_zone + start_time_in_zone);
 					#SET event_starts_at := the_next_date + start_time - time_offset;
                     SET event_starts_at := TIMESTAMP(the_next_date, start_time);
