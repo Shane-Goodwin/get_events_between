@@ -183,7 +183,7 @@ block1: BEGIN
 						`next_date` <= recurrences_end AND
 						date_variable_add(`next_date`, duration_expression, duration_unit) >= recurrences_start AND
 						`next_date` NOT IN (
-							SELECT `date` FROM `event_cancellations` WHERE `event_id` = event_id
+							SELECT `date` FROM `event_cancellations` WHERE `event_cancellations`.`event_id` = event_id
 						)
 					LIMIT events_limit;
 			DECLARE CONTINUE HANDLER FOR NOT FOUND SET no_more_recurrence_rows := TRUE;
