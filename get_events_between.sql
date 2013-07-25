@@ -145,6 +145,7 @@ block1: BEGIN
 			SET recurrences_start := original_date;
 			SET count_limit := event_count;
 		ELSE
+			SET recurrences_start := range_start;
 			SET count_limit := 999999;
 		END IF;
 		
